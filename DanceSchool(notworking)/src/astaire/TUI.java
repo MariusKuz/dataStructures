@@ -44,7 +44,6 @@ public class TUI {
 		String command = stdIn.nextLine().trim();
 		switch (command) {
 		case "1" : // Lists all dancers in a dance
-			
 			display("Lists all dancers in a dance...");
 			display("Enter the name of the required dance:");
 			display(controller.listAllDancersIn(stdIn.nextLine().trim()));

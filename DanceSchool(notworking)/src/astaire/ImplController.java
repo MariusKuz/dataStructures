@@ -5,7 +5,6 @@ import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.List;
 import java.util.stream.Collectors;
 
 public class ImplController implements Controller{
@@ -18,23 +17,31 @@ public class ImplController implements Controller{
 			ArrayList<String> danceShowData =  getCSV("src/csvFiles/danceShowData_dances.csv");
 			
 			for(String line:danceShowData) {
-				String[] splitByTab=line.split("\t");
-
-				ArrayList<String > matchDance= new ArrayList<>();
+				String[] splitByComma=line.split(",");
+				String[] splitBySpace=splitByComma[0].split("\\s+");
 				
-				for(int i=0;i<splitByTab.length-1;++i) { //0
 				
-					matchDance.add(splitByTab[i]);
-
+				
+				//System.out.println(splitDanceShow[0]);
+				String matchDance="";
+				for(int i=0;i<splitBySpace.length-1;++i) {
+				
+					matchDance+=splitBySpace[i]+" ";
+					if(splitBySpace.length-2!=i) {
+						matchDance+=" ";
+					}
+				  
 				}
+			    //
+				
 				System.out.println(matchDance);
-			
 			}
-					
 			//ArrayList<String> filterDance=(ArrayList<String>) danceShowData.stream().filter(group->group.equals(dance)).collect(Collectors.toList()); 
 		   // danceShowData.stream().filter(group->group.equals(dance)).collect(Collectors.toList()); 
 			//System.out.println(filterDance);
 		    return null;
+		    
+		 
 	}
 
 	@Override
@@ -85,24 +92,6 @@ public class ImplController implements Controller{
 		
 	}
 	
-  
-   public List<String> readOrderedFile (String filePath) throws IOException{
-	   String line = "";
-	   String csvSplitBy = "\t";
-	   String[] danceInfo = null;
-	   ArrayList<String> lines = new ArrayList<>();
-	   try (BufferedReader br = new BufferedReader(new FileReader(filePath))){
-		   line = br.readLine();
-		   
-		   while ((line = br.readLine()) !=null) {
-			   danceInfo = line.split(csvSplitBy);
-			   for (String i : danceInfo) {
-				   lines.add(i.trim());
-			   }
-		   }
-	   } catch (FileNotFoundException e) {}
-	return lines;
-   }
 
 	/**private ArrayList<String> csvToArray(String csv) {
 		ArrayList<String> result = new ArrayList<String>();
