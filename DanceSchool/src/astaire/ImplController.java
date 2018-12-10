@@ -17,15 +17,17 @@ public class ImplController implements Controller{
 			ArrayList<String> danceShowData = getCSV("src/csvFiles/danceShowData_dances.csv");
 			
 			String result = null;
-			
+			String trimmed = null;
 			for(String line:danceShowData) {
 				String[] splitByTab = line.split("\t");
 				
 				if (splitByTab[0].equals(dance)) {
 					result = splitByTab[1];
+					trimmed = result.trim();
+					
 				}
 			}
-		    return result;
+		    return trimmed;
 	}
 
 	@Override
@@ -77,37 +79,7 @@ public class ImplController implements Controller{
 	}
 	
   
-   public List<String> readOrderedFile (String filePath) throws IOException{
-	   String line = "";
-	   String csvSplitBy = "\t";
-	   String[] danceInfo = null;
-	   ArrayList<String> lines = new ArrayList<>();
-	   try (BufferedReader br = new BufferedReader(new FileReader(filePath))){
-		   line = br.readLine();
-		   
-		   while ((line = br.readLine()) !=null) {
-			   danceInfo = line.split(csvSplitBy);
-			   for (String i : danceInfo) {
-				   lines.add(i.trim());
-			   }
-		   }
-	   } catch (FileNotFoundException e) {}
-	return lines;
-   }
+  
 
-	/**private ArrayList<String> csvToArray(String csv) {
-		ArrayList<String> result = new ArrayList<String>();
-		
-		if (csv != null) {
-			String[] splitData = csv.split(",");
-			for (int i = 0; i < splitData.length; i++) {
-				if (!(splitData[i] == null) || !(splitData[i].length() == 0)) {
-					result.add(splitData[i].trim());
-				}
-			}
-		}
-		
-		return result;
-	}**/
 
 }
