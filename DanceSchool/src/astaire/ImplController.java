@@ -14,27 +14,18 @@ public class ImplController implements Controller{
 	public String listAllDancersIn(String dance) {
 		//get CSV file for danceShow Data
 		
-		
-			ArrayList<String> danceShowData =  getCSV("src/csvFiles/danceShowData_dances.csv");
+			ArrayList<String> danceShowData = getCSV("src/csvFiles/danceShowData_dances.csv");
+			
+			String result = null;
 			
 			for(String line:danceShowData) {
-				String[] splitByTab=line.split("\t");
-
-				ArrayList<String > matchDance= new ArrayList<>();
+				String[] splitByTab = line.split("\t");
 				
-				for(int i=0;i<splitByTab.length-1;++i) { //0
-				
-					matchDance.add(splitByTab[i]);
-
+				if (splitByTab[0].equals(dance)) {
+					result = splitByTab[1];
 				}
-				System.out.println(matchDance);
-			
 			}
-					
-			//ArrayList<String> filterDance=(ArrayList<String>) danceShowData.stream().filter(group->group.equals(dance)).collect(Collectors.toList()); 
-		   // danceShowData.stream().filter(group->group.equals(dance)).collect(Collectors.toList()); 
-			//System.out.println(filterDance);
-		    return null;
+		    return result;
 	}
 
 	@Override
