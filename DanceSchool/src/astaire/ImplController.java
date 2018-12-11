@@ -15,15 +15,58 @@ public class ImplController implements Controller{
 		//get CSV file for danceShow Data
 		
 			ArrayList<String> danceShowData = getCSV("src/csvFiles/danceShowData_dances.csv");
+			ArrayList<String> danceGroupData = getCSV("src/csvFiles/danceShowData_danceGroups.csv");
+			String result = "";
+			String trimmed = "";
+
+
 			
-			String result = null;
-			String trimmed = null;
+			
 			for(String line:danceShowData) {
-				String[] splitByTab = line.split("\t");
+				String[] splitDanceByTab = line.split("\t"); //split dances by tabs ( [0] dance name [1] performers
 				
-				if (splitByTab[0].equals(dance)) {
-					result = splitByTab[1];
-					trimmed = result.trim();
+
+
+
+				if (splitDanceByTab[0].equals(dance)) {
+					
+					
+					
+					String[] splitDanceByComma =  splitDanceByTab[1].split(","); //split dancers in the dance [0] first performer, [1] second etc
+
+					
+					for (String performer:splitDanceByComma) {
+						result += performer;
+						trimmed = result.trim();
+					}
+					
+					
+					
+					
+					/**
+					for(String groupLine : danceGroupData) { //for every line of DANCE GROUPS
+					String[] splitGroupByTab = groupLine.split("\t"); //split it by tabs
+
+
+					
+					
+					
+					
+					if (splitDanceByComma[1].equals(splitGroupByTab[0])) { //IF [1] -> PERFORMER is equal TO [0] -> DANCE GGROUPS
+						result += splitGroupByTab[1]; //ADD PERFORMERS IN THAT DANCE TO RESULT FROM GROUP CSV
+						trimmed = result.trim();
+					}
+					
+					else         //IDEK PLS SOMEONE SHOOT ME
+						result += splitDanceByComma[1];
+						trimmed = result.trim();
+					
+					
+
+				}
+					
+					
+					**/
 					
 				}
 			}
