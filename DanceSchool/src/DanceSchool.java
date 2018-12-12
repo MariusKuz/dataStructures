@@ -9,26 +9,21 @@ import astaire.ImplController;
 import astaire.TUI;
 
 public class DanceSchool {
-	
-	
-	
+
 	public DanceSchool() {
-	
-		
+
 	}
-	
+
 	public static void main(String args[]) throws FileNotFoundException {
-		
-		Controller controller=new ImplController();
+
+		Controller controller = new ImplController();
 		new TUI(controller);
-		
-		
+
 	}
-	
 
 	public static ArrayList<String> csvToArray(String csv) {
 		ArrayList<String> result = new ArrayList<String>();
-		
+
 		if (csv != null) {
 			String[] splitData = csv.split(",");
 			for (int i = 0; i < splitData.length; i++) {
@@ -37,10 +32,7 @@ public class DanceSchool {
 				}
 			}
 		}
-		
+
 		return result;
 	}
-    }
-	
-
-
+}
