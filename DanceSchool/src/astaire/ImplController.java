@@ -4,9 +4,12 @@ import java.io.BufferedReader;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
+import java.lang.reflect.Array;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
+import java.util.Arrays;
 
 public class ImplController implements Controller {
 
@@ -17,64 +20,83 @@ public class ImplController implements Controller {
 
 		String result = "";
 
-		//for each line in dances csv file
+		// for each line in dances csv file
 		for (String line : dancesData) {
 
-			//split into two sections - [0] is name of dance & [1] is dancers
+			// split into two sections - [0] is name of dance & [1] is dancers
 			String[] splitByTab = line.split("\t");
 
 			splitByTab[0] = splitByTab[0].trim();
 
-			//if name of dance matches given dance name
+			// if name of dance matches given dance name
 			if (splitByTab[0].equals(dance)) {
 
-				//split names of dancers into individual strings
+				// split names of dancers into individual strings
 				String[] separatedNames = splitByComma(splitByTab[1]);
 
-				//iterate through names
+				// iterate through names
 				for (int i = 0; i < separatedNames.length; i++) {
-					//append result with output of getDanceGroupMembers (and trim input)
-						result += ", " + getDanceGroupMembers(separatedNames[i].trim());
+					// append result with output of getDanceGroupMembers (and trim input)
+					result += ", " + getDanceGroupMembers(separatedNames[i].trim());
 				}
 			}
 		}
 
-		//remove leading comma and space
+		// remove leading comma and space
 		result = result.substring(2);
 
 		return result;
 	}
-
+	
 	public String[] splitByComma(String names) {
 		return names.split(", ");
 	}
 
 	public String getDanceGroupMembers(String name) {
-		//get dance group data
+		// get dance group data
 		ArrayList<String> danceGroupsData = getCSV("src/csvFiles/danceShowData_danceGroups.csv");
 
-		//result by default is just name of given
+		// result by default is just name of given
 		String result = name;
 
-		//iterate iterate
+		// iterate iterate
 		for (String line : danceGroupsData) {
 			String[] splitByTab = line.split("\t");
 
-			//if, at any point, name of dance group is equal to given name
+			// if, at any point, name of dance group is equal to given name
 			if (splitByTab[0].equals(name)) {
-				//return names of dancers in group
+				// return names of dancers in group 
 				result = getDanceGroupMembers(splitByTab[1]);
 			}
 		}
 
 		return result;
 	}
-
+	
 	@Override
 	public String listAllDancesAndPerformers() {
-		// TODO Auto-generated method stub
-		return null;
+		
+		// get CSV file for dances Data
+		ArrayList<String> dancesData = getCSV("src/csvFiles/danceShowData_dances.csv");
+
+		int lineNumber = 0;
+		String result = "";
+		
+		//for each line in dances csv file
+		for (String line : dancesData) {
+			
+			//split into two sections - [0] is name of dance & [1] is dancers
+			String[] splitByTab = line.split("\t");
+			
+			lineNumber++;
+			result += lineNumber + ": ";
+			result += (splitByTab[0].trim()) + "\n";
+			result += (listAllDancersIn(splitByTab[0].trim())) + "\n";
+		}
+		
+		return result;
 	}
+	 
 
 	@Override
 	public String checkFeasibilityOfRunningOrder(String filename, int gaps) {
@@ -116,5 +138,5 @@ public class ImplController implements Controller {
 		}
 		return data;
 
-	
+	}
 }
