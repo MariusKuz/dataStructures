@@ -12,7 +12,6 @@ public class ImplController implements Controller {
 
 	@Override
 	public String listAllDancersIn(String dance) {
-
 		// get CSV file for dances Data
 		ArrayList<String> dancesData = getCSV("src/csvFiles/danceShowData_dances.csv");
 
@@ -20,12 +19,12 @@ public class ImplController implements Controller {
 
 		//for each line in dances csv file
 		for (String line : dancesData) {
-			
+
 			//split into two sections - [0] is name of dance & [1] is dancers
 			String[] splitByTab = line.split("\t");
 
 			splitByTab[0] = splitByTab[0].trim();
-			
+
 			//if name of dance matches given dance name
 			if (splitByTab[0].equals(dance)) {
 
@@ -42,7 +41,7 @@ public class ImplController implements Controller {
 
 		//remove leading comma and space
 		result = result.substring(2);
-		
+
 		return result;
 	}
 
@@ -53,14 +52,14 @@ public class ImplController implements Controller {
 	public String getDanceGroupMembers(String name) {
 		//get dance group data
 		ArrayList<String> danceGroupsData = getCSV("src/csvFiles/danceShowData_danceGroups.csv");
-		
+
 		//result by default is just name of given
 		String result = name;
 
 		//iterate iterate
 		for (String line : danceGroupsData) {
 			String[] splitByTab = line.split("\t");
-			
+
 			//if, at any point, name of dance group is equal to given name
 			if (splitByTab[0].equals(name)) {
 				//return names of dancers in group
@@ -117,36 +116,5 @@ public class ImplController implements Controller {
 		}
 		return data;
 
-	}
-
-	public List<String> readOrderedFile(String filePath) throws IOException {
-		String line = "";
-		String csvSplitBy = "\t";
-		String[] danceInfo = null;
-		ArrayList<String> lines = new ArrayList<>();
-		try (BufferedReader br = new BufferedReader(new FileReader(filePath))) {
-			line = br.readLine();
-
-			while ((line = br.readLine()) != null) {
-				danceInfo = line.split(csvSplitBy);
-				for (String i : danceInfo) {
-					lines.add(i.trim());
-				}
-			}
-		} catch (FileNotFoundException e) {
-		}
-		return lines;
-	}
-
-	/**
-	 * private ArrayList<String> csvToArray(String csv) { ArrayList<String> result =
-	 * new ArrayList<String>();
-	 * 
-	 * if (csv != null) { String[] splitData = csv.split(","); for (int i = 0; i <
-	 * splitData.length; i++) { if (!(splitData[i] == null) ||
-	 * !(splitData[i].length() == 0)) { result.add(splitData[i].trim()); } } }
-	 * 
-	 * return result; }
-	 **/
-
+	
 }
