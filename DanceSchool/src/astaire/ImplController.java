@@ -16,8 +16,10 @@ import java.util.Arrays;
 public class ImplController implements Controller {
 
 	int count = 0;
-	int count2 = 0;
 
+	/**
+	 * 
+	 */
 	@Override
 	public String listAllDancersIn(String dance) {
 		// get CSV file for dances Data
@@ -156,12 +158,12 @@ public class ImplController implements Controller {
 		// get CSV file for dances Data
 		ArrayList<String> dancesData = getCSV("src/csvFiles/danceShowData_dances.csv");
 
-		return checkRunningOrder(gaps, dancesData);
+		return makeRunningOrder(gaps, dancesData);
 	}
 
-	private String checkRunningOrder(int gaps, ArrayList<String> runningOrder) {
+	private String makeRunningOrder(int gaps, ArrayList<String> runningOrder) {
 
-		Random ran  = new Random();
+		Random ran = new Random();
 
 		String result = "";
 
@@ -189,26 +191,19 @@ public class ImplController implements Controller {
 					for (String nextDancer : nextDancers) {
 						// if any dancers repeated
 						if (dancer.equals(nextDancer)) {
-//							needsSwap = true;
-//							toSwap = a;
-//							String temp = runningOrder.get(a+1);
-//							runningOrder.add(a+1, runningOrder.get(a));
-//							runningOrder.add(a, temp);
 
-							System.out.println("Swapped: " + runningOrder.get(a).split("\t")[0] + " with: " + runningOrder.get(a+1).split("\t")[0]);
-							Collections.swap(runningOrder, a, ran.nextInt((runningOrder.size()-a))+a);
-							
-//							System.out.println("\n\n Current running Order: \n");
-//							for (String line : runningOrder) {
-//								System.out.println(line);
-//							}
-							
-							if (count > 1000) {
-								return "\nA feasible running order could not be found";
+							// Try 3000 times, if nothing found in that time then assume not possible
+							if (count > 3000) {
+								result = "\nA feasible running order could not be found";
+							} else {
+								// Place conflicting dance in other random place
+								Collections.swap(runningOrder, a, ran.nextInt((runningOrder.size())));
+
+								count++;
+								
+								// Run again
+								makeRunningOrder(gaps, runningOrder);
 							}
-							count++;
-							
-							checkRunningOrder(gaps, runningOrder);
 						}
 					}
 				}
