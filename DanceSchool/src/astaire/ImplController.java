@@ -8,6 +8,8 @@ import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.Set;
+import java.util.TreeSet;
 import java.util.stream.Collectors;
 import java.util.Arrays;
 
@@ -16,8 +18,9 @@ public class ImplController implements Controller {
 	@Override
 	public String listAllDancersIn(String dance) {
 		// get CSV file for dances Data
-		ArrayList<String> dancesData = getCSV("src/csvFiles/danceShowData_dances.csv");
+	
 
+		Set<String> dancesData = new TreeSet<>(getCSV("src/csvFiles/danceShowData_dances.csv"));
 		String result = "";
 
 		// for each line in dances csv file
@@ -49,13 +52,14 @@ public class ImplController implements Controller {
 	}
 	
 	public String[] splitByComma(String names) {
-		return names.split(", ");
+		return names.split(",");
 	}
 
 	public String getDanceGroupMembers(String name) {
 		// get dance group data
-		ArrayList<String> danceGroupsData = getCSV("src/csvFiles/danceShowData_danceGroups.csv");
 
+		Set<String> danceGroupsData = new TreeSet<>(getCSV("src/csvFiles/danceShowData_danceGroups.csv"));
+		
 		// result by default is just name of given
 		String result = name;
 
@@ -64,7 +68,7 @@ public class ImplController implements Controller {
 			String[] splitByTab = line.split("\t");
 
 			// if, at any point, name of dance group is equal to given name
-			if (splitByTab[0].equals(name)) {
+			if (splitByTab[0].equals(name) ) {
 				// return names of dancers in group 
 				result = getDanceGroupMembers(splitByTab[1]);
 			}
@@ -77,7 +81,7 @@ public class ImplController implements Controller {
 	public String listAllDancesAndPerformers() {
 		
 		// get CSV file for dances Data
-		ArrayList<String> dancesData = getCSV("src/csvFiles/danceShowData_dances.csv");
+		TreeSet<String> dancesData = getCSV("src/csvFiles/danceShowData_dances.csv");
 
 		int lineNumber = 0;
 		String result = "";
@@ -88,10 +92,30 @@ public class ImplController implements Controller {
 			//split into two sections - [0] is name of dance & [1] is dancers
 			String[] splitByTab = line.split("\t");
 			
-			lineNumber++;
-			result += lineNumber + ": ";
-			result += (splitByTab[0].trim()) + "\n";
-			result += (listAllDancersIn(splitByTab[0].trim())) + "\n";
+			
+
+			
+			lineNumber++; //print line number
+			result += lineNumber + ": "; 
+			result += (splitByTab[0].trim()) + "\n"; //print group name
+			
+			
+			
+		
+			String finalResult =(listAllDancersIn(splitByTab[0].trim())) ; //find out all the dancers in the dance
+			String[] elements = finalResult.split(","); // split them by commas and place them into array
+			
+			for(int i = 0; i < elements.length; i++) {
+				elements[i] = elements[i].trim(); //trim every element in the array
+			}
+			
+			
+			List<String> fixedLenghtList = Arrays.asList(elements); //put the array elements into a list
+			ArrayList<String> listOfString = new ArrayList<String>(fixedLenghtList); //put the elements of the list into an arrayList
+			Collections.sort(listOfString); //sort the array list alphabetically
+			result += listOfString.toString().replace("[","").replace("]",""); //remove brackets from the answers and add to result
+			result += "\n"; 
+
 		}
 		
 		return result;
@@ -110,12 +134,12 @@ public class ImplController implements Controller {
 		return null;
 	}
 
-	public ArrayList<String> getCSV(String file) {
+	public TreeSet<String> getCSV(String file) {
 
 		// Print program menu and loop till the user exit
 
 		BufferedReader buffer = null;
-		ArrayList<String> data = new ArrayList<>();
+		TreeSet<String> data = new TreeSet<>();
 		try {
 			String line;
 			buffer = new BufferedReader(new FileReader(file));
