@@ -1,16 +1,13 @@
 package astaire;
 
 import java.io.BufferedReader;
-import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.LinkedList;
 import java.util.List;
 import java.util.Random;
-import java.util.stream.Collectors;
+import java.util.TreeSet;
 import java.util.Arrays;
 
 public class ImplController implements Controller {
@@ -18,7 +15,7 @@ public class ImplController implements Controller {
 	int count = 0;
 
 	/**
-	 * 
+	 *
 	 */
 	@Override
 	public String listAllDancersIn(String dance) {
@@ -55,8 +52,8 @@ public class ImplController implements Controller {
 		return result;
 	}
 
-	public String[] splitByComma(String names) {
-		return names.split(", ");
+	public String[] splitByComma(String names) { //split data by comma
+		return names.split(",");
 	}
 
 	public String getDanceGroupMembers(String name) {
@@ -82,23 +79,42 @@ public class ImplController implements Controller {
 
 	@Override
 	public String listAllDancesAndPerformers(String filename) {
-
-		// get CSV file for dances Data
-		ArrayList<String> dancesData = getCSV("src/csvFiles/" + filename);
+		//get the data from in a TreeSet to make the groups sorted
+		TreeSet<String> dancesData = getCSVTree("src/csvFiles/danceShowData_dances.csv");
 
 		int lineNumber = 0;
 		String result = "";
 
-		// for each line in dances csv file
+		//for each line in dances csv file
 		for (String line : dancesData) {
 
-			// split into two sections - [0] is name of dance & [1] is dancers
+			//split into two sections - [0] is name of dance & [1] is dancers
 			String[] splitByTab = line.split("\t");
 
-			lineNumber++;
+
+
+
+			lineNumber++; //print line number
 			result += lineNumber + ": ";
-			result += (splitByTab[0].trim()) + "\n";
-			result += (listAllDancersIn(splitByTab[0].trim())) + "\n";
+			result += (splitByTab[0].trim()) + "\n"; //print group name
+
+
+
+
+			String finalResult =(listAllDancersIn(splitByTab[0].trim())) ; //find out all the dancers in the dance
+			String[] elements = finalResult.split(","); // split them by commas and place them into array
+
+			for(int i = 0; i < elements.length; i++) {
+				elements[i] = elements[i].trim(); //trim every element in the array
+			}
+
+
+			List<String> fixedLenghtList = Arrays.asList(elements); //put the array elements into a list
+			ArrayList<String> listOfString = new ArrayList<String>(fixedLenghtList); //put the elements of the list into an arrayList
+			Collections.sort(listOfString); //sort the array list alphabetically
+			result += listOfString.toString().replace("[","").replace("]",""); //remove brackets from the answers and add to result
+			result += "\n";
+
 		}
 
 		return result;
@@ -189,7 +205,7 @@ public class ImplController implements Controller {
 					// for each dancer in next dances - up until current dance + gaps
 
 					for (String nextDancer : nextDancers) {
-						// if any dancers repeated
+
 						if (dancer.equals(nextDancer)) {
 
 							// Try 3000 times, if nothing found in that time then assume not possible
@@ -200,7 +216,7 @@ public class ImplController implements Controller {
 								Collections.swap(runningOrder, a, ran.nextInt((runningOrder.size())));
 
 								count++;
-								
+
 								// Run again
 								makeRunningOrder(gaps, runningOrder);
 							}
@@ -218,12 +234,41 @@ public class ImplController implements Controller {
 		return result;
 	}
 
-	public ArrayList<String> getCSV(String file) {
+	public ArrayList<String> getCSV(String file) { //returns the CSV file in an ArrayList
 
 		// Print program menu and loop till the user exit
 
 		BufferedReader buffer = null;
 		ArrayList<String> data = new ArrayList<>();
+		try {
+			String line;
+			buffer = new BufferedReader(new FileReader(file));
+			buffer.readLine();
+			while ((line = buffer.readLine()) != null) {
+
+				data.add(line);
+			}
+
+		} catch (IOException e) {
+			e.printStackTrace();
+		} finally {
+			try {
+				if (buffer != null)
+					buffer.close();
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+		}
+		return data;
+
+	}
+
+	public TreeSet<String> getCSVTree(String file) { //returns the CSV file in an TreeSet
+
+		// Print program menu and loop till the user exit
+
+		BufferedReader buffer = null;
+		TreeSet<String> data = new TreeSet<>();
 		try {
 			String line;
 			buffer = new BufferedReader(new FileReader(file));
