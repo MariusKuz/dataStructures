@@ -1,17 +1,13 @@
 package astaire;
 
 import java.io.BufferedReader;
-import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.LinkedList;
 import java.util.List;
 import java.util.Random;
 import java.util.TreeSet;
-import java.util.stream.Collectors;
 import java.util.Arrays;
 
 public class ImplController implements Controller {
@@ -54,7 +50,7 @@ public class ImplController implements Controller {
 		return result;
 	}
 
-	public String[] splitByComma(String names) {
+	public String[] splitByComma(String names) { //split data by comma
 		return names.split(",");
 	}
 
@@ -81,7 +77,7 @@ public class ImplController implements Controller {
 
 	@Override
 	public String listAllDancesAndPerformers(String filename) {
-
+		//get the data from in a TreeSet to make the groups sorted
 		TreeSet<String> dancesData = getCSVTree("src/csvFiles/danceShowData_dances.csv");
 
 		int lineNumber = 0;
@@ -207,21 +203,12 @@ public class ImplController implements Controller {
 					// for each dancer in next dances - up until current dance + gaps
 
 					for (String nextDancer : nextDancers) {
-						// if any dancers repeated
+
 						if (dancer.equals(nextDancer)) {
-//							needsSwap = true;
-//							toSwap = a;
-//							String temp = runningOrder.get(a+1);
-//							runningOrder.add(a+1, runningOrder.get(a));
-//							runningOrder.add(a, temp);
 
 							System.out.println("Swapped: " + runningOrder.get(a).split("\t")[0] + " with: " + runningOrder.get(a+1).split("\t")[0]);
 							Collections.swap(runningOrder, a, ran.nextInt((runningOrder.size()-a))+a);
-							
-//							System.out.println("\n\n Current running Order: \n");
-//							for (String line : runningOrder) {
-//								System.out.println(line);
-//							}
+
 							
 							if (count > 1000) {
 								return "\nA feasible running order could not be found";
@@ -243,7 +230,7 @@ public class ImplController implements Controller {
 		return result;
 	}
 
-	public ArrayList<String> getCSV(String file) {
+	public ArrayList<String> getCSV(String file) { //returns the CSV file in an ArrayList
 
 		// Print program menu and loop till the user exit
 
@@ -255,7 +242,6 @@ public class ImplController implements Controller {
 			buffer.readLine();
 			while ((line = buffer.readLine()) != null) {
 
-				// System.out.println( csvToArray(line));
 				data.add(line);
 			}
 
@@ -273,7 +259,7 @@ public class ImplController implements Controller {
 
 	}
 	
-	public TreeSet<String> getCSVTree(String file) {
+	public TreeSet<String> getCSVTree(String file) { //returns the CSV file in an TreeSet
 
 		// Print program menu and loop till the user exit
 
