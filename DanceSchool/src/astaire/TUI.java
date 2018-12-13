@@ -51,7 +51,7 @@ public class TUI {
 			break;
 		case "2" : // Lists all dances and respective dancers
 			display("Lists all dance numbers and the respective dancers...");
-			display(controller.listAllDancesAndPerformers());
+			display(controller.listAllDancesAndPerformers("danceShowData_dances.csv"));
 			break;
 		case "3" : // Checks the feasibility of a given running order
 			display("Checks the feasibility of a given running order...");

@@ -3,6 +3,8 @@
  */
 package astaire;
 
+import java.util.ArrayList;
+
 /**
  * A controller for the dance show programme generator system.
  * This controller includes the 4 features that the intended
@@ -25,7 +27,7 @@ public interface Controller {
 	 * @return	a String representation of dance numbers 
 	 * 			and the name of the respective performers in alphabetical order
 	 */
-	String listAllDancesAndPerformers();
+	String listAllDancesAndPerformers(String filename);
 
 	/**
 	 * Checks feasibility of a given running order.
